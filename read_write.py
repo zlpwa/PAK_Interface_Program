@@ -6,13 +6,27 @@
 # This file uses the DLL from the rw_data.c code to read and write data         #
 # from a binary file in the PAK format. It provides Python wrappers for the c   #
 # functions. Note: not all functions are required to be called as they call     #
-# each other internally.                                                        #
+# each other internally. This file also includes functions to convert data to   #
+# and from numpy arrays                                                         #
 #################################################################################
 
 import ctypes
 import os
 import sys
-from bin_pak_dataset import BinPakData
+import numpy as np
+
+class BinPakData(ctypes.Structure):
+    _fields_ = [
+        ('name', ctypes.c_char * 256),                              # char name[256]
+        ('xCplx', ctypes.c_int),                                    # int xCplx
+        ('nx', ctypes.c_long),                                      # long nx
+        ('xdata', ctypes.POINTER(ctypes.c_double)),                 # double *xdata
+        ('zCplx', ctypes.c_int),                                    # int zCplx
+        ('nz', ctypes.c_long),                                      # long nz
+        ('zdata', ctypes.POINTER(ctypes.c_double)),                 # double *zdata
+        ('yCplx', ctypes.c_int),                                    # int yCplx
+        ('ydata', ctypes.POINTER(ctypes.POINTER(ctypes.c_double)))  # double **ydata
+    ]
 
 # Load DLL
 dll_path = os.path.abspath("pak_lib.dll")
@@ -165,3 +179,21 @@ def py_write_pak_bin_file_header(df, n_data_arrays):
     if ret < 0:
         raise RuntimeError("Failed to write PAK bin file header")
     return ret
+
+# Functions to convert binPakData to numpy arrays and vice versa
+# DO NOT MODIFY THE FUNCTION BELOW
+def ydata_to_np_array(data):
+    nx = data.nx
+    ydata = data.ydata.contents
+    y_array1 = np.zeros(nx, dtype = np.float64)
+    for i in range(nx):
+        y_array1[i] = ydata[i]
+    return y_array1
+
+# DO NOT MODIFY THE FUNCTION BELOW
+def np_array_to_ydata(filtered_data, data):
+    ydata = data.ydata.contents
+    for i in range(filtered_data.size):
+        ydata[i] = filtered_data[i]
+    data.ydata.contents = ydata
+    return data
