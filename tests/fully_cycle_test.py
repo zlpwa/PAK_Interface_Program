@@ -18,7 +18,6 @@ import ctypes
 # needed so debugger can find read_write.py for imports 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.read_write import *
-
 from src.my_function import *
 
 READ_MODE = 1
@@ -26,9 +25,8 @@ WRITE_MODE = 2
 
 
 # Define file names as strings here
-#ifile = "sin_wave.pak52"
-ifile = "output.bin"
-ofile = "test2.bin"
+ifile = "supporting_files/sin_wave.pak52"
+ofile = "test.bin"
 
 def assert_binpak_data_equal(a, b):
     # Basic fields
