@@ -12,11 +12,11 @@
 import sys
 import os
 import ctypes
-from my_function import *
+from src.my_function import *
 
 # needed so debugger can find read_write.py for imports 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from read_write import *
+from src.read_write import *
 
 READ_MODE = 1
 WRITE_MODE = 2
