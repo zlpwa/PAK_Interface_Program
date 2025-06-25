@@ -26,7 +26,7 @@ WRITE_MODE = 2
 # Define file names as strings here
 ifile = "sin_wave.pak52"
 #ifile = "output.bin"
-ofile = "test2.bin"
+ofile = "test.bin"
 
 class TestBinPakData(unittest.TestCase):
     def test_populate_data(self):

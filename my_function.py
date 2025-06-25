@@ -5,7 +5,7 @@
 #################################################################################
 # This file is called from main and is used to scale the ydata using python     #
 # packages. Import packages and define the functions below. This program relies #
-# on nz = 1.                          #
+# on nz = 1.                                                                    #
 #################################################################################
 
 # May need to add imports
