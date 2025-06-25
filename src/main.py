@@ -42,22 +42,25 @@ def main():
     in_data_set_ptr = py_read_one_data_set(df_i)
     data = in_data_set_ptr.contents
 
-    # Convert to Python and apply filter
+    # Convert to Python (do this for each data array even if not scaling)
     y_array = ydata_to_np_array(data)
     x_array = xdata_to_np_array(data)
     z_array = zdata_to_np_array(data)
 
-    # Change filter here
+    # ============= EDIT BELOW THIS LINE =============
+    # Change filter here (if not applying a filter, just assign the array directly i.e. filtered_ydata = y_array)
     filtered_ydata = apply_gaussian_filter(y_array)
     filtered_xdata = apply_gaussian_filter(x_array)
     filtered_zdata = apply_gaussian_filter(z_array)
+
+    # ============= EDIT ABOVE THIS LINE =============
 
     # Create new BinPakData object for filtered data
     new_filtered_data_ptr = copy_bin_data(data, filtered_xdata, filtered_ydata, filtered_zdata)
 
     py_write_one_data_set(df_o, new_filtered_data_ptr)
 
-    # Be sure to free memory after use (no need to free new_filtered_data_ptr as it is not allocated in C)
+    # Free memory after use (no need to free new_filtered_data_ptr as it is not allocated in C)
     py_free_bin_pak_data(in_data_set_ptr) 
     py_close_pak_bin_file(df_i)
     py_close_pak_bin_file(df_o)

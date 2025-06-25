@@ -12,7 +12,9 @@
 from scipy.ndimage import gaussian_filter1d # EXAMPLE
 import numpy as np
 
-# EXAMPLE
+# EDIT/ADD IMPORTS DIRECTLY ABOVE THIS LINE
+#######################################################
+# EXAMPLES
 def apply_gaussian_filter(arr, sigma = 2): 
     return gaussian_filter1d(arr, sigma = sigma)
 
@@ -27,4 +29,5 @@ def filter_below_threshold(arr, threshold=0.5):
 
 #######################################################
 # Add any additional functions you need below this line
-
+# Pay close attention to parameters and return types
+# Return type must be numpy array unless main.py is edited
