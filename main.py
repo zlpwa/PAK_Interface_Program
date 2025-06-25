@@ -21,15 +21,6 @@ from read_write import *
 READ_MODE = 1
 WRITE_MODE = 2
 
-# ============= DO NOT EDIT ABOVE THIS LINE ============== #
-# Use file names as strings if not running from the command line
-# Define file names as strings here: syntax is "filename.ext"
-# ifile = "sin_wave.pak52"
-# ifile = "output.bin"
-# ofile = "filtered_data.bin"
-
-# ============= DO NOT EDIT BELOW THIS LINE ============== #
-
 if len(sys.argv) != 3:
     print("[ERROR] Usage: python main.py <input_file.bin> <output_file.bin>")
     sys.exit(1)
@@ -50,19 +41,22 @@ def main():
     in_data_set_ptr = py_read_one_data_set(df_i)
     data = in_data_set_ptr.contents
 
+    # Convert to Python and apply filter
     y_array = ydata_to_np_array(data)
+    x_array = xdata_to_np_array(data)
+    z_array = zdata_to_np_array(data)
 
-    # ========== DO NOT EDIT ABOVE THIS LINE =========== #
+    # Change filter here
+    filtered_ydata = apply_gaussian_filter(y_array)
+    filtered_xdata = apply_gaussian_filter(x_array)
+    filtered_zdata = apply_gaussian_filter(z_array)
 
-    # Apply filter using my_function file
-    filtered_data = apply_gaussian_filter(y_array)
+    # Create new BinPakData object for filtered data
+    new_filtered_data_ptr = copy_bin_data(data, filtered_xdata, filtered_ydata, filtered_zdata)
 
-    # ========== DO NOT EDIT BELOW THIS LINE =========== #
+    py_write_one_data_set(df_o, new_filtered_data_ptr)
 
-    data = np_array_to_ydata(filtered_data, data)
-    py_write_one_data_set(df_o, in_data_set_ptr)
-
-    # be sure to free memory after use
+    # Be sure to free memory after use (no need to free new_filtered_data_ptr as it is not allocated in C)
     py_free_bin_pak_data(in_data_set_ptr) 
     py_close_pak_bin_file(df_i)
     py_close_pak_bin_file(df_o)

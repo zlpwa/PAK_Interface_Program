@@ -5,15 +5,26 @@
 #################################################################################
 # This file is called from main and is used to scale the ydata using python     #
 # packages. Import packages and define the functions below. This program relies #
-# on nz = 1 and only allows for the scaling of ydata.                           #
+# on nz = 1.                          #
 #################################################################################
 
 # May need to add imports
 from scipy.ndimage import gaussian_filter1d # EXAMPLE
+import numpy as np
 
 # EXAMPLE
-def apply_gaussian_filter(y_array, sigma = 2): 
-    return gaussian_filter1d(y_array, sigma = sigma)
+def apply_gaussian_filter(arr, sigma = 2): 
+    return gaussian_filter1d(arr, sigma = sigma)
+
+def ex_diff(arr):
+    return np.diff(arr)
+
+def ex_a_range(arr):
+    return np.arange(len(arr)/5)
+
+def filter_below_threshold(arr, threshold=0.5):
+    return arr[arr <= threshold]
 
 #######################################################
 # Add any additional functions you need below this line
+

@@ -34,6 +34,7 @@ if sys.platform == "win32":
     os.add_dll_directory(os.path.dirname(dll_path))
 pak_lib = ctypes.CDLL(dll_path)
 
+
 # Explicitly declare parameter and return types of functions in DLL
 # ========================== File/Memory Handling ===========================
 # void closePakBinFile(int df);
@@ -181,7 +182,7 @@ def py_write_pak_bin_file_header(df, n_data_arrays):
     return ret
 
 # Functions to convert binPakData to numpy arrays and vice versa
-# DO NOT MODIFY THE FUNCTION BELOW
+# Y DATA
 def ydata_to_np_array(data):
     nx = data.nx
     ydata = data.ydata.contents
@@ -190,10 +191,93 @@ def ydata_to_np_array(data):
         y_array1[i] = ydata[i]
     return y_array1
 
-# DO NOT MODIFY THE FUNCTION BELOW
-def np_array_to_ydata(filtered_data, data):
-    ydata = data.ydata.contents
+def np_array_to_ydata(filtered_data):
+    filt_ydata_array = (ctypes.c_double * filtered_data.size)()
     for i in range(filtered_data.size):
-        ydata[i] = filtered_data[i]
-    data.ydata.contents = ydata
-    return data
+        filt_ydata_array[i] = filtered_data[i]
+    return filt_ydata_array
+
+# X DATA
+def xdata_to_np_array(data):
+    nx = data.nx
+    xdata = data.xdata
+    x_array1 = np.zeros(nx, dtype = np.float64)
+    for i in range(nx):
+        x_array1[i] = xdata[i]
+    return x_array1
+
+def np_array_to_xdata(filtered_data):
+    filt_xdata_array = (ctypes.c_double * filtered_data.size)()
+    for i in range(filtered_data.size):
+        filt_xdata_array[i] = filtered_data[i]
+    return filt_xdata_array
+
+# Z DATA
+def zdata_to_np_array(data):
+    nz = data.nz
+    zdata = data.zdata
+    z_array1 = np.zeros(nz, dtype = np.float64)
+    for i in range(nz):
+        z_array1[i] = zdata[i]
+    return z_array1
+
+def np_array_to_zdata(filtered_data):
+    filt_zdata_array = (ctypes.c_double * filtered_data.size)()
+    for i in range(filtered_data.size):
+        filt_zdata_array[i] = filtered_data[i]
+    return filt_zdata_array
+
+
+def copy_bin_data(data, filtered_x_data, filtered_y_data, filtered_z_data):
+    # Create object in Python so do not have to free it 
+    new_data_ptr = ctypes.pointer(BinPakData())
+    new_data = new_data_ptr.contents
+
+    new_data.name = data.name
+    new_data.nz = filtered_z_data.size
+    new_data.nx = filtered_x_data.size
+    new_data.xCplx = data.xCplx
+    new_data.zCplx = data.zCplx
+    new_data.yCplx = data.yCplx
+
+    # X DATA
+    x_ptr = np_array_to_xdata(filtered_x_data)
+    new_data.xdata = ((ctypes.c_double) * 1)()
+    new_data.xdata = x_ptr 
+
+    # Y DATA
+    y_ptr_0 = np_array_to_ydata(filtered_y_data)
+    new_data.ydata = (ctypes.POINTER(ctypes.c_double) * 1)()
+    new_data.ydata[0] = y_ptr_0 
+
+    # Z DATA
+    z_ptr = np_array_to_zdata(filtered_z_data)
+    new_data.zdata = ((ctypes.c_double) * 1)()
+    new_data.zdata = z_ptr
+
+    return new_data_ptr
+
+# Function to print the contents of BinPakData for testing
+def print_bin_pak_data(data): 
+    print(f"Name     : {data.name.decode('utf-8') if data.name else None}")
+    print(f"nx       : {data.nx}")
+    print(f"nz       : {data.nz}")
+    print(f"xCplx    : {data.xCplx}")
+    print(f"yCplx    : {data.yCplx}")
+    print(f"zCplx    : {data.zCplx}")
+    print()
+    print("xdata:")
+    for i in range(data.nx):
+        print(f"  x[{i}] = {data.xdata[i]}")
+    print()
+    print("ydata:")
+    for z in range(data.nz):
+        print(f"  y[{z}]:")
+        for i in range(data.nx):
+            print(f"    y[{z}][{i}] = {data.ydata[z][i]}")
+    print()
+    print("zdata:")
+    for i in range(data.nz):
+        print(f"  z[{i}] = {data.zdata[i]}")
+
+
