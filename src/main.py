@@ -22,7 +22,7 @@ from src.my_function import *
 READ_MODE = 1
 WRITE_MODE = 2
 
-# If number of arguements change, process those here.
+# ADD ADDITIONAL ARGUMENTS AND PROCESSING HERE IF NEEDED
 if len(sys.argv) != 3:
     print("[ERROR] Usage: python main.py <input_file.bin> <output_file.bin>")
     sys.exit(1)
