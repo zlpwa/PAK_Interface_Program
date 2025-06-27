@@ -15,6 +15,7 @@ import os
 import sys
 import numpy as np
 
+# Mirrors structure from rw_data.c
 class BinPakData(ctypes.Structure):
     _fields_ = [
         ('name', ctypes.c_char * 256),                              # char name[256]
@@ -28,8 +29,12 @@ class BinPakData(ctypes.Structure):
         ('ydata', ctypes.POINTER(ctypes.POINTER(ctypes.c_double)))  # double **ydata
     ]
 
+
 # Load DLL
-dll_path = os.path.abspath("pak_lib.dll")
+# Base path is root directory and is joined with dll_path
+# If you change file structure, you may need to change this
+base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+dll_path = os.path.join(base_path, "pak_lib.dll")
 if sys.platform == "win32":
     os.add_dll_directory(os.path.dirname(dll_path))
 pak_lib = ctypes.CDLL(dll_path)

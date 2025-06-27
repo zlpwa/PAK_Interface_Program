@@ -15,7 +15,7 @@ import sys
 import os
 import ctypes
 
-# needed so debugger can find read_write.py for imports 
+# Line below needed in some instances depending on file structure and where program is called from
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.read_write import *
 from src.my_function import *

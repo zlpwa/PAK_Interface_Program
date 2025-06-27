@@ -14,7 +14,7 @@ import os
 import ctypes
 
 
-# needed so debugger can find read_write.py for imports 
+# Line below needed in some instances depending on file structure and where program is called from
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.read_write import *
 from src.my_function import *
@@ -22,6 +22,7 @@ from src.my_function import *
 READ_MODE = 1
 WRITE_MODE = 2
 
+# If number of arguements change, process those here.
 if len(sys.argv) != 3:
     print("[ERROR] Usage: python main.py <input_file.bin> <output_file.bin>")
     sys.exit(1)
