@@ -33,7 +33,7 @@ class BinPakData(ctypes.Structure):
 # Load DLL
 # Base path is root directory and is joined with dll_path
 # If you change file structure, you may need to change this
-base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+base_path = os.path.dirname(os.path.abspath(__file__))
 dll_path = os.path.join(base_path, "pak_lib.dll")
 if sys.platform == "win32":
     os.add_dll_directory(os.path.dirname(dll_path))

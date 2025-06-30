@@ -16,8 +16,8 @@ import ctypes
 
 # Line below needed in some instances depending on file structure and where program is called from
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from src.read_write import *
-from src.my_function import *
+from read_write import *
+from my_function import *
 
 READ_MODE = 1
 WRITE_MODE = 2
